@@ -18,28 +18,33 @@ class UsuarioRepositoryImpl(
         return usuarioDao.obtenerUsuarioActivoFlow().map { it?.toDomain() }
     }
 
-    override suspend fun autenticar(correo: String, passwordHash: String): Usuario? {
-        val entity = usuarioDao.autenticar(correo, passwordHash)
-        if (entity != null) {
-            usuarioDao.cerrarTodasLasSesiones()
-            usuarioDao.activarSesion(entity.id)
-            return entity.toDomain()
-        }
-        return null
+    override suspend fun buscarPorCorreo(correo: String): Usuario? {
+        return usuarioDao.buscarPorCorreo(correo.trim().lowercase())?.toDomain()
     }
 
-    override suspend fun registrar(nombre: String, correo: String, passwordHash: String): Long {
+    override suspend fun registrar(
+        nombre: String,
+        correo: String,
+        passwordHash: String,
+        passwordSalt: String
+    ): Long {
         usuarioDao.cerrarTodasLasSesiones()
         val nuevo = UsuarioEntity(
             nombre = nombre,
-            correo = correo,
+            correo = correo.trim().lowercase(),
             passwordHash = passwordHash,
+            passwordSalt = passwordSalt,
             ecopuntosTotales = 50, // Bono de bienvenida inicial
             nivel = "Semilla Verde",
             co2EvitadoKg = 0.0,
             esSesionActiva = true
         )
         return usuarioDao.insertar(nuevo)
+    }
+
+    override suspend fun activarSesion(usuarioId: Long) {
+        usuarioDao.cerrarTodasLasSesiones()
+        usuarioDao.activarSesion(usuarioId)
     }
 
     override suspend fun actualizarBalance(

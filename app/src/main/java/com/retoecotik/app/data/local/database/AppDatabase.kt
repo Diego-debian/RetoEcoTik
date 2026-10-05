@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.retoecotik.app.data.local.dao.RecompensaDao
 import com.retoecotik.app.data.local.dao.RegistroReciclajeDao
@@ -13,14 +14,15 @@ import com.retoecotik.app.data.local.entity.RecompensaEntity
 import com.retoecotik.app.data.local.entity.RegistroReciclajeEntity
 import com.retoecotik.app.data.local.entity.RetoEntity
 import com.retoecotik.app.data.local.entity.UsuarioEntity
+import com.retoecotik.app.domain.security.PasswordHasher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
 
 /**
  * Base de datos local Room sobre SQLite para RetoEcoTik (DEC-025).
  * Provee la persistencia Local-First del MVP desacoplada del modelo corporativo MySQL de GA6.
+ * Versión 2: Incorpora derivación segura PBKDF2WithHmacSHA256 con salt aleatorio en usuarios.
  */
 @Database(
     entities = [
@@ -29,7 +31,7 @@ import java.security.MessageDigest
         RetoEntity::class,
         RecompensaEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -43,6 +45,15 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
+        /**
+         * Migración explícita de versión 1 a 2: añade columna passwordSalt a la tabla usuarios.
+         */
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE usuarios ADD COLUMN passwordSalt TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
         fun getDatabase(context: Context, scope: CoroutineScope): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -50,6 +61,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "retoecotik_mvp.db"
                 )
+                    .addMigrations(MIGRATION_1_2)
                     .addCallback(DatabaseCallback(scope))
                     .fallbackToDestructiveMigration()
                     .build()
@@ -82,15 +94,17 @@ abstract class AppDatabase : RoomDatabase() {
             val reciclajeDao = database.registroReciclajeDao()
 
             if (usuarioDao.contarUsuarios() == 0) {
-                // Usuario demo inicial (password "1234" en SHA-256)
-                val digest = MessageDigest.getInstance("SHA-256")
-                val hash1234 = digest.digest("1234".toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it) }
+                // Usuario demo inicial (password "1234" con PBKDF2WithHmacSHA256 y salt aleatorio)
+                val demoSaltBytes = PasswordHasher.generarSalt()
+                val demoHashHex = PasswordHasher.hashear("1234", demoSaltBytes)
+                val demoSaltHex = PasswordHasher.bytesToHex(demoSaltBytes)
 
                 val demoUserId = usuarioDao.insertar(
                     UsuarioEntity(
                         nombre = "EcoExplorador Demo",
                         correo = "demo@retoecotik.com",
-                        passwordHash = hash1234,
+                        passwordHash = demoHashHex,
+                        passwordSalt = demoSaltHex,
                         ecopuntosTotales = 150,
                         nivel = "Brote Activo",
                         co2EvitadoKg = 18.5,
@@ -98,7 +112,7 @@ abstract class AppDatabase : RoomDatabase() {
                     )
                 )
 
-                // Entregas de historial previas demostrativas
+                // Entregas de historial previas demostrativas (UC-01)
                 reciclajeDao.insertar(
                     RegistroReciclajeEntity(
                         usuarioId = demoUserId,

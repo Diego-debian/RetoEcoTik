@@ -20,9 +20,6 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuarios WHERE esSesionActiva = 1 LIMIT 1")
     suspend fun obtenerUsuarioActivo(): UsuarioEntity?
 
-    @Query("SELECT * FROM usuarios WHERE correo = :correo AND passwordHash = :passwordHash LIMIT 1")
-    suspend fun autenticar(correo: String, passwordHash: String): UsuarioEntity?
-
     @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
     suspend fun buscarPorCorreo(correo: String): UsuarioEntity?
 

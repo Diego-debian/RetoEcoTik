@@ -8,8 +8,9 @@ import kotlinx.coroutines.flow.Flow
  */
 interface UsuarioRepository {
     fun obtenerUsuarioActivo(): Flow<Usuario?>
-    suspend fun autenticar(correo: String, passwordHash: String): Usuario?
-    suspend fun registrar(nombre: String, correo: String, passwordHash: String): Long
+    suspend fun buscarPorCorreo(correo: String): Usuario?
+    suspend fun registrar(nombre: String, correo: String, passwordHash: String, passwordSalt: String): Long
+    suspend fun activarSesion(usuarioId: Long)
     suspend fun actualizarBalance(usuarioId: Long, ecopuntosGanados: Int, co2AdicionalKg: Double)
     suspend fun cerrarSesion()
 }

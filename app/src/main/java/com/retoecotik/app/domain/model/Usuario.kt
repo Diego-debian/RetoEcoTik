@@ -8,7 +8,8 @@ data class Usuario(
     val id: Long = 0,
     val nombre: String,
     val correo: String,
-    val passwordHash: String,
+    val passwordHash: String = "",
+    val passwordSalt: String = "",
     val ecopuntosTotales: Int = 0,
     val nivel: String = "Semilla Verde",
     val co2EvitadoKg: Double = 0.0

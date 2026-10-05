@@ -14,6 +14,7 @@ data class UsuarioEntity(
     val nombre: String,
     val correo: String,
     val passwordHash: String,
+    val passwordSalt: String,
     val ecopuntosTotales: Int = 0,
     val nivel: String = "Semilla Verde",
     val co2EvitadoKg: Double = 0.0,
@@ -24,6 +25,7 @@ data class UsuarioEntity(
         nombre = nombre,
         correo = correo,
         passwordHash = passwordHash,
+        passwordSalt = passwordSalt,
         ecopuntosTotales = ecopuntosTotales,
         nivel = nivel,
         co2EvitadoKg = co2EvitadoKg
@@ -36,6 +38,7 @@ data class UsuarioEntity(
                 nombre = usuario.nombre,
                 correo = usuario.correo,
                 passwordHash = usuario.passwordHash,
+                passwordSalt = usuario.passwordSalt,
                 ecopuntosTotales = usuario.ecopuntosTotales,
                 nivel = usuario.nivel,
                 co2EvitadoKg = usuario.co2EvitadoKg,
