@@ -13,7 +13,7 @@ data class CalculoReciclajeResult(
 )
 
 /**
- * Caso de uso que aplica las reglas de negocio para la conversión de pesaje a ecopuntos (RF09, RF10).
+ * Caso de uso que aplica las reglas de negocio para la conversión de pesaje a ecopuntos (RF08 / UC-01).
  * Aplica factores ambientales proporcionales por cada kilogramo entregado.
  */
 class CalcularEcopuntosUseCase {

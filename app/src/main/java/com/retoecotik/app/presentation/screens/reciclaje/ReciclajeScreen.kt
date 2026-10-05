@@ -167,7 +167,7 @@ fun ReciclajeScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
-                        text = "Estimación de Recompensa (RF09 / RF10)",
+                        text = "Estimación de Ecopuntos (RF08)",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onPrimaryContainer

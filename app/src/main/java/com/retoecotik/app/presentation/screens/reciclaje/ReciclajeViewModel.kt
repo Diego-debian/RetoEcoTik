@@ -28,7 +28,7 @@ data class ReciclajeUiState(
 )
 
 /**
- * ViewModel del módulo prioritario de registro de reciclaje (UC-01 / RF08 a RF10).
+ * ViewModel del módulo prioritario de registro de reciclaje (UC-01 / RF08).
  * Vinculado a SCR_04_RECICLAJE y modal de confirmación SCR_09_CONFIRMAR_RECICLAJE.
  */
 class ReciclajeViewModel(

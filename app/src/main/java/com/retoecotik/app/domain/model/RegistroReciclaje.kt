@@ -1,7 +1,7 @@
 package com.retoecotik.app.domain.model
 
 /**
- * Registro de pesaje y entrega de material reciclable (RF08, RF09, RF10 / UC-01).
+ * Registro de pesaje y entrega de material reciclable (RF08 / UC-01 / Historial: NOT_EXPLICITLY_DEFINED).
  * Representa la acción medular del módulo prioritario de RetoEcoTik.
  */
 data class RegistroReciclaje(

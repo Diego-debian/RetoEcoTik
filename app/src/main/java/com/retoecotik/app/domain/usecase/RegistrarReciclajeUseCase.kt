@@ -7,7 +7,7 @@ import com.retoecotik.app.domain.repository.RetoRepository
 import com.retoecotik.app.domain.repository.UsuarioRepository
 
 /**
- * Caso de uso medular del MVP (UC-01 / RF08, RF09, RF10).
+ * Caso de uso medular del MVP (UC-01 / RF08).
  * Orquesta el registro de entrega de reciclaje, el cálculo de ecopuntos, la persistencia,
  * la actualización del balance del usuario y el avance de los retos comunitarios activos.
  */
