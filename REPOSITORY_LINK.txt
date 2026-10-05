@@ -1,0 +1,18 @@
+# ENLACE DEL REPOSITORIO DE CONTROL DE VERSIONES — RETOECOTIK
+# Evidencia: GA7-220501096-AA3-EV01
+
+Repositorio Oficial del Proyecto:
+https://github.com/Diego-debian/RetoEcoTik.git
+
+URL Alternativa en GitHub:
+https://github.com/diegodebian/RetoEcoTik.git
+
+Cuenta Pública:
+diegodebian (Diego-debian)
+
+Rama Principal:
+main
+
+Estado del Remoto en la Nube:
+USER_ACTION_REQUIRED (Pendiente de creación en GitHub por el usuario antes de sincronización final)
+El código local se encuentra completamente versionado e integrado en la carpeta raíz 'RetoEcoTik/'.
