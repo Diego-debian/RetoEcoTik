@@ -141,4 +141,17 @@ class PasswordAuthSmokeTest {
         assertFalse(PasswordHasher.verificar("ClaveIncorrecta", saltHex, hashHex))
         assertFalse(PasswordHasher.verificar("", saltHex, hashHex))
     }
+
+    @Test
+    fun passwordHasher_legacyBlankSalt_esRechazadoSinError() {
+        // Simula registro legacy donde passwordSalt quedó en blanco tras migración estructural
+        val pass = "ClaveLegacy123"
+        val legacyHash = "a1b2c3d4e5f6"
+        val blankSalt = ""
+
+        assertFalse(
+            "Un registro con salt en blanco no debe autenticar con PBKDF2 (exige re-registro)",
+            PasswordHasher.verificar(pass, blankSalt, legacyHash)
+        )
+    }
 }

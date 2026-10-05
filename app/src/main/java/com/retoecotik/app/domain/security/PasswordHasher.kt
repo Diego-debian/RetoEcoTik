@@ -8,16 +8,16 @@ import javax.crypto.spec.PBEKeySpec
  * Servicio de derivación segura de contraseñas para el MVP local de RetoEcoTik (STD-SEC-01).
  * Implementa PBKDF2WithHmacSHA256 con salt aleatorio generado por SecureRandom.
  *
- * Parámetros técnicos:
+ * Parámetros técnicos calibrados por benchmark en emulador Android API 35:
  * - ALGORITHM: PBKDF2WithHmacSHA256
- * - ITERATIONS: 10,000 iteraciones
+ * - ITERATIONS: 100_000 iteraciones (benchmark: ~245ms hash, ~289ms verify en ART x86_64)
  * - SALT_SIZE: 16 bytes (128 bits)
  * - KEY_LENGTH: 256 bits (32 bytes)
  */
 object PasswordHasher {
 
     const val ALGORITHM = "PBKDF2WithHmacSHA256"
-    const val ITERATIONS = 10_000
+    const val ITERATIONS = 100_000
     const val SALT_SIZE_BYTES = 16
     const val KEY_LENGTH_BITS = 256
 

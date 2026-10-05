@@ -1,7 +1,7 @@
 package com.retoecotik.app.domain.model
 
 /**
- * Representación inmutable del perfil de usuario en el dominio de RetoEcoTik (RF01, RF02, RF07).
+ * Representación inmutable del perfil de usuario en el dominio de RetoEcoTik (RF01, RF02).
  * Contiene el balance de ecopuntos acumulados y la estimación de CO₂ evitado.
  */
 data class Usuario(

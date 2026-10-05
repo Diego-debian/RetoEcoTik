@@ -47,6 +47,16 @@ abstract class AppDatabase : RoomDatabase() {
 
         /**
          * Migración explícita de versión 1 a 2: añade columna passwordSalt a la tabla usuarios.
+         * 
+         * Estrategia de credenciales preexistentes:
+         * La adición de columna passwordSalt con DEFAULT '' resuelve la compatibilidad del esquema
+         * de base de datos sin inventar conversiones criptográficas ficticias (los hashes SHA-256 legacy
+         * no pueden transformarse a PBKDF2 sin el texto plano original).
+         * Registros con passwordSalt en blanco son rechazados determinísticamente por PasswordHasher.verificar.
+         * Estrategias aplicadas:
+         * - DEVELOPMENT_DATABASE_RESET: Para entornos de desarrollo y pruebas de sustentación, la base de datos
+         *   se inicializa limpiamente con un usuario demo generado con salt aleatorio y PBKDF2 (100,000 iteraciones).
+         * - LEGACY_CREDENTIAL_REQUIRES_REREGISTRATION: Cualquier cuenta legacy histórica requiere reinscripción.
          */
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(db: SupportSQLiteDatabase) {
